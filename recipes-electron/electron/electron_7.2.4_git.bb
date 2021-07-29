@@ -2,12 +2,13 @@ SUMMARY = "Build cross platform desktop apps with web technologies"
 DESCRIPTION = "The Electron framework lets you write cross-platform \
 desktop applications using JavaScript, HTML and CSS. It is based on \
 io.js and Chromium and is used in the Atom editor."
-HOMEPAGE = "http://electron.atom.io/"
+HOMEPAGE = "http://electionjs.com/"
 LICENSE = "MIT"
 
-LIC_FILES_CHKSUM = " \
-  file://LICENSE;md5=dd413c962a5a67c951cc5dd842060ace \
+LIC_FILES_CHKSUM = "\
+    file://LICENSE;md5=f8436f54558748146ec7ebd61ca6ac38 \
 "
+
 
 DEPENDS += " \
   ninja-native \
@@ -27,12 +28,13 @@ DEPENDS += " \
   libcap \
 "
 
-PV = "7.2.4+git${SRCPV}"
+
+PV = "7.2.4"
+
 
 SRC_URI = " \
-  git://github.com/electron/electron.git;protocol=https \
+  git://github.com/electron/electron.git;tag=v${PV};nobranch=1 \
 "
-SRCREV = "0552e0d5de46ffa3b481d741f1db5c779e201565"
 
 S = "${WORKDIR}/git"
 
