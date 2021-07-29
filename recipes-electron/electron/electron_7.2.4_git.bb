@@ -27,13 +27,12 @@ DEPENDS += " \
   libcap \
 "
 
-PV = "0.0-gitr${SRCPV}"
+PV = "7.2.4+git${SRCPV}"
 
 SRC_URI = " \
-  git://github.com/atom/electron.git;protocol=https \
-  file://fix_build.patch \
+  git://github.com/electron/electron.git;protocol=https \
 "
-SRCREV = "135aca02af8aef5792984d47bf1c7a35a11f90a3"
+SRCREV = "0552e0d5de46ffa3b481d741f1db5c779e201565"
 
 S = "${WORKDIR}/git"
 
