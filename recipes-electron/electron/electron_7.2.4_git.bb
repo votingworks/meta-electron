@@ -45,10 +45,20 @@ S = "${WORKDIR}/git"
 
 inherit electron-arch npm
 
+# Cache fetched chromium code
+SSTATETASKS += "do_patch"
+do_patch[sstate-plaindirs] = "${S}"
+ 
+python do_patch_setscene() {
+    sstate_setscene(d)
+}
+addtask do_patch_setscene
+
 do_patch_prepend() {
     # TODO: do we need python2?
     export PATH=${DEPOT_TOOLS}:$PATH
 }
+do_patch[dirs] = "${S}"
 
 # Pull down the code using gclient, so that we get the correct version of the
 # chromium dependency. We might be able to use meta-chromium, but it doesn't
@@ -59,7 +69,7 @@ do_patch_prepend() {
 # https://github.com/electron/electron/blob/v7.2.4/docs/development/build-instructions-gn.md
 do_patch() {
     gclient config --name "src/electron" --unmanaged https://github.com/electron/electron
-    gclient sync --with_branch_heads --with_tags
+    gclient sync -j ${BB_NUMBER_THREADS} --with_branch_heads --with_tags
 }
 do_patch[progress] = "outof:^\[(\d+)/(\d+)\]\s+"
 
