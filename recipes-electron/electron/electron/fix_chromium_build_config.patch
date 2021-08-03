@@ -1,0 +1,11 @@
+--- old/BUILDCONFIG.gn	2021-08-03 19:21:32.931864645 +0000
++++ new/BUILDCONFIG.gn	2021-08-03 19:21:51.148563106 +0000
+@@ -401,7 +401,7 @@
+ # (FreeBSD, etc.) toolkits, (X11, GTK, etc.), or features. For these cases,
+ # write a conditional in the target to remove the file(s) from the list when
+ # your platform/toolkit/feature doesn't apply.
+-set_sources_assignment_filter(sources_assignment_filter)
++# set_sources_assignment_filter(sources_assignment_filter)
+ 
+ # =============================================================================
+ # TARGET DEFAULTS
