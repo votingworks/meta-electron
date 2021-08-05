@@ -1,4 +1,8 @@
 # File taken and modified from https://github.com/jwinarske/meta-flutter
+#
+# This recipe provides chromium's build toolchain, depot_tools. These tools are
+# very similar to Yocto's own, which creates lots of problems. 
+#
 LICENSE = "GPLv3"
 LIC_FILES_CHKSUM = "file://LICENSE;md5=c2c05f9bdd5fc0b458037c2d1fb8d95e"
 
@@ -11,7 +15,12 @@ SRC_URI[certs.md5sum] = "1ecab07e89925a6e8684b75b8cf84890"
 
 S = "${WORKDIR}/git"
 
-inherit native
+#RDEPENDS_${PN}-dev = "\
+#    python_2.7.18 \
+#    perl \
+#    gcc \
+#    glibc-dev \
+#"
 
 do_compile() {
 
@@ -27,14 +36,42 @@ do_compile() {
 
 do_install() {
 
-    install -d ${D}/${datadir}/depot_tools
-    cp -rTv ${S}/. ${D}${datadir}/depot_tools
+    install -d ${D}/${datadir_native}/depot_tools
+#    cp -rTv ${S}/. ${D}${datadir_native}/depot_tools
+    cp ${S}/gclient ${D}${datadir_native}/depot_tools/
 
-    install -m 644 ${WORKDIR}/ca-certificates.crt ${D}${datadir}/depot_tools
+
+    install -m 644 ${WORKDIR}/ca-certificates.crt ${D}${datadir_native}/depot_tools
 }
 
-FILES_${PN}-dev = "${datadir}/depot_tools/*"
+#FILES_${PN} = "${datadir_native}/depot_tools/*"
+FILES_${PN}-dev = "\
+    ${datadir_native}/depot_tools/* \
+"
 
+
+#    ${datadir_native}/depot_tools/* \
+#    ${datadir_native}/depot_tools/.cipd_bin/* \
+#    ${datadir_native}/depot_tools/.cipd_bin/.vpython \
+#    ${datadir_native}/depot_tools/.cipd_bin/.versions/* \
+#    ${datadir_native}/depot_tools/.cipd_bin/.cipd/* \
+#    ${datadir_native}/depot_tools/.cipd_client_cache/* \
+#    ${datadir_native}/depot_tools/git-templates/* \
+#    ${datadir_native}/depot_tools/python2-bin/* \
+#    ${datadir_native}/depot_tools/bootstrap/* \
+#    ${datadir_native}/depot_tools/.versions \
+#    ${datadir_native}/depot_tools/.vpython3 \
+#    ${datadir_native}/depot_tools/.vpython \
+#    ${datadir_native}/depot_tools/.cipd_client \
+#    ${datadir_native}/depot_tools/.cipd_impl.ps1 \
+#    ${datadir_native}/depot_tools/.git/* \
+#    ${datadir_native}/depot_tools/.gitattributes \
+#    ${datadir_native}/depot_tools/.gitignore\
+#    ${datadir_native}/depot_tools/.style.yapf \
+#"
+
+
+INSANE_SKIP_${PN} = "already-stripped"
 INSANE_SKIP_${PN}-dev = "already-stripped"
 
-BBCLASSEXTEND += "native nativesdk"
+BBCLASSEXTEND += "native"

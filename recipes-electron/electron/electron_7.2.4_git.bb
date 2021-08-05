@@ -5,7 +5,6 @@ desktop applications using JavaScript, HTML and CSS. It is based on \
 io.js and Chromium and is used in the Atom editor."
 HOMEPAGE = "http://electionjs.com/"
 LICENSE = "MIT"
-LAYER_SERIES_COMPAT_electron-layer="hardknott"
 
 LIC_FILES_CHKSUM = "\
     file://src/LICENSE;md5=f8436f54558748146ec7ebd61ca6ac38 \
@@ -30,18 +29,19 @@ DEPENDS += " \
   libcap \
   gn-native \
   depot-tools-native \
-  bash \
 "
 
 
-DEPOT_TOOLS ??= "${STAGING_DIR_NATIVE}/usr/share/depot_tools"
+#DEPOT_TOOLS ??= "${STAGING_DIR_NATIVE}/usr/share/depot_tools"
+#DEPOT_TOOLS ??= "${D${datadir}/depot_tools"
+#DEPOT_TOOLS ??= "depot_tools"
 
 PV = "7.2.4"
 
 
 SRC_URI = " \
   git://github.com/electron/electron.git;tag=v${PV};nobranch=1 \
-  file://fix_chromium_build_config.patch;apply=yes \
+  file://fix_chromium_build_config.patch;apply=yes; \
 "
 
 S = "${WORKDIR}/git"
@@ -57,10 +57,10 @@ python do_sync_setscene() {
 }
 addtask do_sync_setscene
 
-do_sync_prepend() {
-    # TODO: do we need python2?
-    export PATH=${DEPOT_TOOLS}:$PATH
-}
+#do_sync_prepend() {
+#    # TODO: do we need python2?
+#    export PATH=${DEPOT_TOOLS}:$PATH
+#}
 
 # Pull down the code using gclient, so that we get the correct version of the
 # chromium dependency. We might be able to use meta-chromium, but it doesn't
@@ -72,7 +72,8 @@ do_sync_prepend() {
 # Derived from these instructions:
 # https://github.com/electron/electron/blob/v7.2.4/docs/development/build-instructions-gn.md
 do_sync() {
-    gclient config --name "src/electron" --unmanaged https://github.com/electron/electron
+    
+    ${datadir_native}/depot_tools/gclient config --name "src/electron" --unmanaged https://github.com/electron/electron
 
     # Use git hash from 7.2.4 commit
     # Ideally this would be in SRCREV but because Electron doens't
@@ -86,7 +87,7 @@ do_sync() {
     #
     # What I'm worried it *might* be doing: redownloading the whole electron
     # code base into a subdir inside the existing electron git repo. 
-    gclient sync --revision 0552e0d5de46ffa3b481d741f1db5c779e201565 -j ${BB_NUMBER_THREADS} --with_branch_heads --with_tags
+    ${datadir_native}/depot_tools/gclient sync --revision 0552e0d5de46ffa3b481d741f1db5c779e201565 -j ${BB_NUMBER_THREADS} --with_branch_heads --with_tags
 }
 do_sync[progress] = "outof:^\[(\d+)/(\d+)\]\s+"
 do_sync[dirs] = "${S}"
