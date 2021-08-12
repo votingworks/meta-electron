@@ -36,10 +36,28 @@ do_compile() {
 
 do_install() {
 
-    install -d ${D}/${datadir_native}/depot_tools
-#    cp -rTv ${S}/. ${D}${datadir_native}/depot_tools
-    cp ${S}/gclient ${D}${datadir_native}/depot_tools/
+    install -d ${D}${datadir_native}/depot_tools
+#    cp -rTv ${S}/. ${D}${datadir_native}/depot_tools/
+    #cp -r ${S} ${D}${datadir_native}/depot_tools/
 
+    # We don't need this
+    #rm ${D}#{datadir_native}/depot_tools/git/ninja-linux32
+
+    cp ${S}/gclient ${D}${datadir_native}/depot_tools/
+    cp ${S}/gclient.py ${D}${datadir_native}/depot_tools/
+
+    cp ${S}/cipd ${D}${datadir_native}/depot_tools/
+
+    cp ${S}/vpython3 ${D}${datadir_native}/depot_tools/
+
+    cp ${S}/cipd_bin_setup.sh ${D}${datadir_native}/depot_tools/
+    cp ${S}/cipd_manifest.txt ${D}${datadir_native}/depot_tools/
+
+    install -d ${D}${datadir_native}/depot_tools/.cipd_bin
+    cp ${S}/.cipd_bin/vpython3 ${D}${datadir_native}/depot_tools/.cipd_bin/
+
+
+    cp ${S}/python3_bin_reldir.txt ${D}${datadir_native}/depot_tools/
 
     install -m 644 ${WORKDIR}/ca-certificates.crt ${D}${datadir_native}/depot_tools
 }
@@ -47,11 +65,8 @@ do_install() {
 #FILES_${PN} = "${datadir_native}/depot_tools/*"
 FILES_${PN}-dev = "\
     ${datadir_native}/depot_tools/* \
+    ${datadir_native}/depot_tools/.cipd_bin/* \
 "
-
-
-#    ${datadir_native}/depot_tools/* \
-#    ${datadir_native}/depot_tools/.cipd_bin/* \
 #    ${datadir_native}/depot_tools/.cipd_bin/.vpython \
 #    ${datadir_native}/depot_tools/.cipd_bin/.versions/* \
 #    ${datadir_native}/depot_tools/.cipd_bin/.cipd/* \
